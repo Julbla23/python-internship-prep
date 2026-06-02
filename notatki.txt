@@ -1,0 +1,341 @@
+🔵 LISTY (list):
+
+Lista:
+
+przechowuje wiele elementów
+jest mutowalna (można zmieniać)
+ma indeksy od 0
+Tworzenie listy
+tasks = ["gym", "study", "shopping"]
+Indeksy
+print(tasks[0])  # gym
+print(tasks[1])  # study
+Dodawanie elementu
+tasks.append("python")
+
+Wynik:
+
+["gym", "study", "shopping", "python"]
+Usuwanie
+tasks.remove("gym")
+
+lub:
+
+tasks.pop()
+Sprawdzanie długości
+len(tasks)
+Sprawdzenie czy istnieje
+if "study" in tasks:
+    print("Exists")
+Iteracja po liście
+for task in tasks:
+    print(task)
+
+🔵 SŁOWNIKI (dict)
+
+Słownik:
+
+przechowuje dane w formie:
+klucz: wartość
+bardzo ważny w backendzie i API
+Tworzenie słownika
+task = {
+    "id": 1,
+    "title": "Learn Python",
+    "done": False
+}
+Pobieranie wartości
+print(task["title"])
+Dodawanie nowego pola
+task["priority"] = "high"
+Zmiana wartości
+task["done"] = True
+Usuwanie
+del task["priority"]
+Iteracja po słowniku
+Po kluczach
+for key in task:
+    print(key)
+Po wartościach
+for value in task.values():
+    print(value)
+Po kluczu i wartości
+for key, value in task.items():
+    print(key, value)
+
+🔵 PĘTLE
+
+Pętla = wykonywanie kodu wiele razy.
+
+for
+
+Najczęściej używana.
+
+Iteracja po liście
+tasks = ["gym", "study", "python"]
+
+for task in tasks:
+    print(task)
+range()
+for i in range(5):
+    print(i)
+
+Wynik:
+
+0
+1
+2
+3
+4
+enumerate()
+
+Przydatne do numerowania.
+
+tasks = ["gym", "study"]
+
+for index, task in enumerate(tasks):
+    print(index, task)
+while
+
+Działa dopóki warunek jest True.
+
+Przykład
+count = 0
+
+while count < 5:
+    print(count)
+    count += 1
+🔵 BARDZO WAŻNE — czego będziesz używać w projekcie CLI
+
+To będzie fundament:
+
+Lista słowników
+
+🔥 Najważniejszy pattern dla backendu.
+
+tasks = [
+    {
+        "id": 1,
+        "title": "Learn Python",
+        "done": False
+    },
+    {
+        "id": 2,
+        "title": "Go gym",
+        "done": True
+    }
+]
+Iteracja po taskach
+for task in tasks:
+    print(task["title"])
+Dodawanie nowego taska
+new_task = {
+    "id": 3,
+    "title": "Learn Django",
+    "done": False
+}
+
+tasks.append(new_task)
+
+Funkcja to:
+
+kawałek kodu, który wykonuje jedno konkretne zadanie.
+
+Zamiast pisać ten sam kod wiele razy:
+
+❌
+
+print("Welcome Julia")
+print("Welcome Adam")
+print("Welcome Tom")
+
+tworzysz funkcję:
+
+✅
+
+def welcome(name):
+    print(f"Welcome {name}")
+
+i używasz:
+
+welcome("Julia")
+welcome("Adam")
+🔵 Budowa funkcji
+def add(a, b):
+    return a + b
+def
+
+oznacza:
+
+„tworzę funkcję”
+
+add
+
+nazwa funkcji.
+
+(a, b)
+
+parametry (wejście do funkcji).
+
+return
+
+oddaje wynik.
+
+🔥 Funkcja krok po kroku
+def multiply(a, b):
+    result = a * b
+    return result
+Co się dzieje?
+1.
+
+Wywołujesz:
+
+multiply(2, 3)
+2.
+
+Python podstawia:
+
+a = 2
+b = 3
+3.
+
+Liczy:
+
+result = 6
+4.
+
+Oddaje wynik:
+
+return 6
+🔥 return vs print
+
+To JEDNA z najważniejszych rzeczy w Pythonie.
+
+🔴 print()
+
+Tylko pokazuje coś na ekranie.
+
+def add(a, b):
+    print(a + b)
+Wynik
+add(2, 3)
+
+pokazuje:
+
+5
+
+ALE...
+
+Problem
+result = add(2, 3)
+
+result będzie:
+
+None
+🔵 Dlaczego?
+
+Bo funkcja NIC nie zwróciła.
+
+Pokazała wynik, ale go nie oddała.
+
+✅ return
+def add(a, b):
+    return a + b
+Teraz:
+result = add(2, 3)
+
+result będzie:
+
+5
+🔥 Najprościej
+print
+
+👉 „powiedz coś”
+
+return
+
+👉 „daj mi wynik”
+
+🔥 Wizualizacja
+print
+def greet():
+    print("Hello")
+
+Python:
+
+📢 Hello
+
+i koniec.
+
+return
+def greet():
+    return "Hello"
+
+Python:
+
+📦 "Hello"
+
+i możesz dalej używać tego wyniku.
+
+🔥 Dlaczego return jest tak ważny?
+
+Bo backend/APIs prawie zawsze:
+
+ZWRACAJĄ dane,
+a nie je printują.
+🔥 Przykład backendowy
+def get_user():
+    return {
+        "name": "Julia",
+        "age": 23
+    }
+
+API zwraca dane.
+
+Nie:
+
+print(user)
+🔥 return kończy funkcję
+
+BARDZO WAŻNE.
+
+def test():
+    print("A")
+    return 5
+    print("B")
+Wynik
+A
+
+B się NIE wykona.
+
+Po return funkcja kończy działanie.
+
+🔥 Możesz zwracać wszystko
+int
+return 5
+string
+return "Hello"
+list
+return [1, 2, 3]
+dict
+return {"name": "Julia"}
+🔥 Bardzo ważny pattern
+def find_user(users, username):
+    for user in users:
+        if user["username"] == username:
+            return user
+
+    return "User not found"
+
+To jest bardzo backendowe myślenie.
+
+🧠 Co MUSISZ zapamiętać
+print()	return
+pokazuje	oddaje wynik
+do debugowania	do logiki aplikacji
+nie zapisuje wyniku	można używać dalej
+często pomocnicze	kluczowe w backendzie
+
+def get_full_name(name, surname):
+    return f"{name} {surname}"
+
