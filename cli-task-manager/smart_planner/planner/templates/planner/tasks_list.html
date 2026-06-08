@@ -1,0 +1,15 @@
+<h1>Taski na dziś</h1>
+
+{% if tasks %}
+    <ol>
+        {% for task in tasks %}
+            <li>
+                {{ task.name }}
+                <a href="{% url 'delete_task' task.id %}">Usuń task</a>
+            </li>
+        {% endfor %}
+    </ol>
+{% else %}
+    <p>Nie masz zaplanowanych tasków na dziś.</p>
+    <button type="button">Dodaj task</button>
+{% endif %}

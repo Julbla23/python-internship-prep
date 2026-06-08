@@ -3,4 +3,4 @@ from .models import Category, Task
 
 # Register your models here.
 admin.site.register(Category)
-admin.site.register(Taskgit )
+admin.site.register(Task)
