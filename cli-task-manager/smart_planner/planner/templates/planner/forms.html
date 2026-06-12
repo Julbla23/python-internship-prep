@@ -1,29 +1,29 @@
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">Send</button>
+    <button type="submit">Zapisz task</button>
 </form>
 
-<form method="post">
-    {{ form.non_field_errors }}
-    {% for field in form %}
-        <div class="fieldWrapper">
-            {{ field.errors }}
-            {{ field.label_tag }} {{ field }}
-        </div>
-    {% endfor %}
-</form>
+<!--<form method="post">-->
+<!--    {{ form.non_field_errors }}-->
+<!--    {% for field in form %}-->
+<!--        <div class="fieldWrapper">-->
+<!--            {{ field.errors }}-->
+<!--            {{ field.label_tag }} {{ field }}-->
+<!--        </div>-->
+<!--    {% endfor %}-->
+<!--</form>-->
 
-<form method="post">
-    {{ form.non_field_errors }}
-    <div class="fieldWrapper">
-        {{ form.subject.errors }}
-        <label for="{{ form.subject.id_for_label }}">Email subject:</label>
-        {{ form.subject }}
-    </div>
-    <div class="fieldWrapper">
-        {{ form.cc_myself.errors }}
-        <label for="{{ form.cc_myself.id_for_label }}">CC yourself?</label>
-        {{ form.cc_myself }}
-    </div>
-</form>
+<!--<form method="post">-->
+<!--    {{ form.non_field_errors }}-->
+<!--    <div class="fieldWrapper">-->
+<!--        {{ form.subject.errors }}-->
+<!--        <label for="{{ form.subject.id_for_label }}">Email subject:</label>-->
+<!--        {{ form.subject }}-->
+<!--    </div>-->
+<!--    <div class="fieldWrapper">-->
+<!--        {{ form.cc_myself.errors }}-->
+<!--        <label for="{{ form.cc_myself.id_for_label }}">CC yourself?</label>-->
+<!--        {{ form.cc_myself }}-->
+<!--    </div>-->
+<!--</form>-->

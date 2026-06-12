@@ -4,12 +4,27 @@
     <ol>
         {% for task in tasks %}
             <li>
-                {{ task.name }}
-                <a href="{% url 'delete_task' task.id %}">Usuń task</a>
+                {% if task.status == "done" %}
+                   <s>{{ task.name }}</s>
+                {% else %}
+                    {{ task.name }}
+                    <a href="{% url 'status_done' task.id %}">
+                    <button type="button">Zrobione</button>
+                    </a>
+                {% endif %}
+
+                <a href="{% url 'delete_task' task.id %}">
+                    <button type="button">Usuń task</button>
+                </a>
             </li>
         {% endfor %}
+        <a href="{% url 'add_task' %}">
+        <button type="button">Dodaj task</button>
+        </a>
     </ol>
 {% else %}
     <p>Nie masz zaplanowanych tasków na dziś.</p>
-    <button type="button">Dodaj task</button>
+    <a href="{% url 'add_task' %}">
+        <button type="button">Dodaj task</button>
+    </a>
 {% endif %}
