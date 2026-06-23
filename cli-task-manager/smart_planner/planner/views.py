@@ -49,3 +49,6 @@ def add_task(request):
     else:
         form = AddTask()
     return render(request, "planner/forms.html", {"form": form})
+
+def home(request):
+    return render(request, "planner/home.html")

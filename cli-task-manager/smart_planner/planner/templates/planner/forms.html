@@ -3,7 +3,9 @@
     {{ form.as_p }}
     <button type="submit">Zapisz task</button>
 </form>
-
+<a href="{% url 'home' %}">
+    <br><button type="button">Wróć do menu</button>
+<a/>
 <!--<form method="post">-->
 <!--    {{ form.non_field_errors }}-->
 <!--    {% for field in form %}-->
