@@ -1,9 +1,11 @@
+from calendar import monthcalendar
 from datetime import date
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 
 from .forms import AddTask
 from .models import Task
+from calendar import monthcalendar, month_name
 
 
 def task_list(request):
@@ -52,3 +54,16 @@ def add_task(request):
 
 def home(request):
     return render(request, "planner/home.html")
+
+def calendar(request):
+    year = 2026
+    month = 6
+
+    calendar_data = monthcalendar(2026,6)
+
+    return render(request, "planner/calendar.html", {
+        "calendar_data": calendar_data,
+        "month_name": month_name[month],
+        "year": year,
+    })
+
