@@ -9,4 +9,5 @@ urlpatterns = [
     path("tasks/<int:n>/done", views.status_done, name="status_done"),
     path("", views.home, name="home"),
     path("calendar/", views.calendar, name="calendar"),
+    path("calendar/<int:year>/<int:month>/<int:day>", views.tasks_by_day, name="tasks_by_day")
 ]

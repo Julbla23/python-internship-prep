@@ -22,20 +22,21 @@
             <th scope="col">Nd</th>
         </tr>
     </thead>
-
-    <tbody>
-        {% for week in calendar_data %}
-            <tr>
-                {% for day in week %}
-                    <td>
-                        {% if day != 0 %}
-                            {{ day }}
-                        {% endif %}
-                    </td>
-                {% endfor %}
-            </tr>
+    {% for week in calendar_data %}
+    <tr>
+        {% for day in week %}
+        <td>
+            {% if day != 0 %}
+                <a href="{% url 'tasks_by_day' year month day %}">
+                <button type="button">
+                {{ day }}</button></a>
+            {% endif %}</td>
         {% endfor %}
-    </tbody>
+    {% endfor %}</tr>
 </table>
+
+<a href="{% url 'home' %}">
+    <br><button type="button">Wróć do menu</button>
+<a/>
 </body>
 </html>

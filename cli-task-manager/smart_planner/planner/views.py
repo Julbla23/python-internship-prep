@@ -6,6 +6,7 @@ from django.http import HttpResponse
 from .forms import AddTask
 from .models import Task
 from calendar import monthcalendar, month_name
+from datetime import datetime, date
 
 
 def task_list(request):
@@ -57,13 +58,19 @@ def home(request):
 
 def calendar(request):
     year = 2026
-    month = 6
+    month =
 
-    calendar_data = monthcalendar(2026,6)
+    calendar_data = monthcalendar(2026,7)
 
     return render(request, "planner/calendar.html", {
         "calendar_data": calendar_data,
         "month_name": month_name[month],
+        "month": month,
         "year": year,
     })
+
+def tasks_by_day(request, year, month, day):
+    my_date = date(year, month, day)
+    tasks = Task.objects.filter(planned_date=my_date)
+    return render(request, "planner/tasks_list.html", {"tasks": tasks})
 
