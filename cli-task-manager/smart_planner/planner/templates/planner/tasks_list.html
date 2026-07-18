@@ -16,6 +16,9 @@
                 <a href="{% url 'delete_task' task.id %}">
                     <button type="button">Usuń task</button>
                 </a>
+                <a href="{% url 'edit_task' task.id %}">
+                    <button type="button">Edytuj</button>
+                </a>
             </li>
         {% endfor %}
         <a href="{% url 'add_task' %}">

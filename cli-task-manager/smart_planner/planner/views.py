@@ -3,7 +3,7 @@ from datetime import date
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 
-from .forms import AddTask
+from .forms import AddTask, EditTask
 from .models import Task
 from calendar import monthcalendar, month_name
 from datetime import datetime, date
@@ -53,12 +53,23 @@ def add_task(request):
         form = AddTask()
     return render(request, "planner/forms.html", {"form": form})
 
+def edit_task(request, n):
+    task = Task.objects.get(id=n)
+    if request.method =="POST":
+        form = EditTask(request.POST, instance=task) #bierze dane z formularza, bierze istniejący task, nakłada nowe dane na ten obiekt
+        if form.is_valid():
+            form.save()
+            return redirect("home")
+    else:
+        form = EditTask(instance=task)
+    return render(request, "planner/forms.html", {"form": form,"editing": True})
+
 def home(request):
     return render(request, "planner/home.html")
 
 def calendar(request):
     year = 2026
-    month =
+    month = 7
 
     calendar_data = monthcalendar(2026,7)
 
