@@ -47,7 +47,8 @@ def add_task(request):
             planned_date = form.cleaned_data['planned_date']
             duration_minutes = form.cleaned_data['duration_minutes']
             status = form.cleaned_data['status']
-            Task.objects.create(name=name, priority=priority, planned_date=planned_date, duration_minutes=duration_minutes,status=status)
+            category= form.cleaned_data['category']
+            Task.objects.create(name=name, priority=priority, planned_date=planned_date, duration_minutes=duration_minutes,status=status, category=category)
             return redirect("task_list")
     else:
         form = AddTask()

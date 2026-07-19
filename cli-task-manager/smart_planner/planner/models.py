@@ -42,4 +42,4 @@ class Task(models.Model):
     )
 
     def __str__(self):
-        return f"{self.name} ({self.duration}) due {self.deadline} ({self.priority})"
+        return f"{self.name} ({self.duration_minutes}) due {self.deadline} ({self.priority})"
