@@ -17,7 +17,7 @@ class AddTask(forms.Form):
             attrs={'type':'date'}
         ), required=False
     )
-    duration_minutes = forms.IntegerField(min_value=1)
+    duration_minutes = forms.IntegerField(required=False)
     priority = forms.ChoiceField(choices=PRIORITY_CHOICES)
     status = forms.ChoiceField(choices=STATUS_CHOICES)
     category = forms.ModelChoiceField(queryset=Category.objects.all(), required=False)

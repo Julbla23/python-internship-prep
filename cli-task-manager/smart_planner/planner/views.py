@@ -1,18 +1,31 @@
 from calendar import monthcalendar
 from datetime import date
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 
 from .forms import AddTask, EditTask
-from .models import Task
+from .models import Task, Category
 from calendar import monthcalendar, month_name
 from datetime import datetime, date
+import json
 
 
 def task_list(request):
-    tasks = Task.objects.filter(planned_date = date.today())
+    tasks = Task.objects.filter(planned_date = date.today()).order_by("position")
     return render(request, "planner/tasks_list.html", {"tasks": tasks})
 
+def change_order(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        order = data.get("order")
+        if order:
+            for position, task_id in enumerate(order, 1):
+                task = Task.objects.get(id=task_id)
+                task.position = position
+                task.save()
+            return JsonResponse({"success": True})
+
+    return JsonResponse({"success": False})
 """
 Task.object.all() to mój model, czyli tabela w bazie danych <- pobierz wszystkie taski z tabeli Task
 objects to manager django do niego się zawsze zwracamy np. Tasks.objects.filter(...)
@@ -48,7 +61,7 @@ def add_task(request):
             duration_minutes = form.cleaned_data['duration_minutes']
             status = form.cleaned_data['status']
             category= form.cleaned_data['category']
-            Task.objects.create(name=name, priority=priority, planned_date=planned_date, duration_minutes=duration_minutes,status=status, category=category)
+            Task.objects.create(name=name, priority=priority, planned_date=planned_date, status=status, category=category)
             return redirect("task_list")
     else:
         form = AddTask()
@@ -85,4 +98,16 @@ def tasks_by_day(request, year, month, day):
     my_date = date(year, month, day)
     tasks = Task.objects.filter(planned_date=my_date)
     return render(request, "planner/tasks_list.html", {"tasks": tasks})
+
+def add_category(request):
+    if request.method == "POST":
+        category_name = request.POST.get("name").strip()
+        if category_name:
+            if not Category.objects.filter(name=category_name).exists():
+                category = Category.objects.create(
+                    name=category_name,
+                )
+            else:
+                raise Exception("Category already exists")
+    return redirect("add_task")
 

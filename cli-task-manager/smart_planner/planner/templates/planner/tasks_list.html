@@ -1,9 +1,21 @@
+{% load static %}
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Task List</title>
+</head>
+<body>
 <h1>Taski na dziś</h1>
 
 {% if tasks %}
     <ol>
         {% for task in tasks %}
-            <li>
+            <li data-task-id="{{ task.id }}">
                 {% if task.status == "done" %}
                    <s>{{ task.name }}</s>
                 {% else %}
@@ -33,4 +45,7 @@
 {% endif %}
 <a href="{% url 'home' %}">
     <br><button type="button">Wróć do menu</button>
-<a/>
+</a>
+<script src="{% static 'js/change_order.js' %}"></script>
+</body>
+</html>

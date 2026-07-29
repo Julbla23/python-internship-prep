@@ -8,6 +8,19 @@
         <button type="submit">Zapisz task</button>
     {% endif %}
 </form>
+
+<form method="post" action="{% url 'add_category' %}">
+    {% csrf_token %}
+
+    <input type="text" name="name">
+    <br>
+
+    <button type="submit">
+        Dodaj kategorię
+    </button>
+</form>
+
 <a href="{% url 'home' %}">
-    <br><button type="button">Wróć do menu</button>
+    <br>
+    <button type="button">Wróć do menu</button>
 </a>
