@@ -1,17 +1,14 @@
-from calendar import monthcalendar
-from datetime import date
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
-
 from .forms import AddTask, EditTask
 from .models import Task, Category
 from calendar import monthcalendar, month_name
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 import json
 
 
 def task_list(request):
-    tasks = Task.objects.filter(planned_date = date.today()).order_by("position")
+    tasks = Task.objects.filter(planned_date__date = date.today()).order_by("position")
     return render(request, "planner/tasks_list.html", {"tasks": tasks})
 
 def change_order(request):
@@ -51,6 +48,36 @@ def status_done(request, n):
     task.save()
     return redirect("task_list")
 
+
+def find_over_lapping_tasks(
+        planned_date, duration_minutes, excluded_task_id=None
+):
+    new_start = planned_date
+    new_end = planned_date + timedelta(minutes=duration_minutes)
+
+    tasks = Task.objects.all()
+
+    if excluded_task_id is not None:
+        tasks = tasks.exclude(id=excluded_task_id)
+
+    overlapping_tasks = []
+
+    for task in tasks:
+        existing_start = task.planned_date
+        existing_end = (
+            task.planned_date + timedelta(minutes=task.duration_minutes)
+        )
+
+        tasks_overlap = (
+            new_start < existing_end
+            and new_end > existing_start
+        )
+
+        if tasks_overlap:
+            overlapping_tasks.append(task)
+
+    return overlapping_tasks
+
 def add_task(request):
     if request.method == "POST":
         form = AddTask(request.POST)
@@ -61,7 +88,21 @@ def add_task(request):
             duration_minutes = form.cleaned_data['duration_minutes']
             status = form.cleaned_data['status']
             category= form.cleaned_data['category']
-            Task.objects.create(name=name, priority=priority, planned_date=planned_date, status=status, category=category)
+
+            overlapping_tasks = find_over_lapping_tasks(
+                planned_date=planned_date,
+                duration_minutes=duration_minutes
+            )
+
+            if overlapping_tasks:
+                return render(
+                    request, "planner/forms.html",
+                    {
+                        "form" : form,
+                        "overlapping_tasks" : overlapping_tasks
+                    }
+                )
+            Task.objects.create(name=name, priority=priority, planned_date=planned_date, duration_minutes=duration_minutes, status=status, category=category)
             return redirect("task_list")
     else:
         form = AddTask()
@@ -83,9 +124,9 @@ def home(request):
 
 def calendar(request):
     year = 2026
-    month = 7
+    month = 8
 
-    calendar_data = monthcalendar(2026,7)
+    calendar_data = monthcalendar(2026,8)
 
     return render(request, "planner/calendar.html", {
         "calendar_data": calendar_data,
@@ -96,7 +137,7 @@ def calendar(request):
 
 def tasks_by_day(request, year, month, day):
     my_date = date(year, month, day)
-    tasks = Task.objects.filter(planned_date=my_date)
+    tasks = Task.objects.filter(planned_date__date=my_date)
     return render(request, "planner/tasks_list.html", {"tasks": tasks})
 
 def add_category(request):

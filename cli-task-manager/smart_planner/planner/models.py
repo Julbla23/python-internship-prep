@@ -26,9 +26,9 @@ PRIORITY_CHOICES = [
 
 class Task(models.Model):
     name = models.CharField(max_length=100)
-    planned_date = models.DateField()
+    planned_date = models.DateTimeField()
     deadline = models.DateField(null=True, blank=True)
-    duration_minutes = models.PositiveIntegerField(null=True, blank=True)
+    duration_minutes = models.PositiveIntegerField()
     priority = models.CharField(max_length=20, choices=PRIORITY_CHOICES, default="low")
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="todo")
     user = models.EmailField()

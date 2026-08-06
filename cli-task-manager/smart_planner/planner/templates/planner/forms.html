@@ -1,3 +1,6 @@
+{% extends "base.html" %}
+{% block content %}
+
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
@@ -24,3 +27,69 @@
     <br>
     <button type="button">Wróć do menu</button>
 </a>
+
+{% if overlapping_tasks %}
+
+<div class="modal fade" id="overlapModal" tabindex="-1" aria-labelledby="overlapModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="overlapModalLabel">
+                    ⚠️ Konflikt terminów
+                </h5>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close">
+                </button>
+            </div>
+
+            <div class="modal-body">
+
+                <p>
+                    Ten task nachodzi na następujące zadania:
+                </p>
+
+                <ul>
+                    {% for task in overlapping_tasks %}
+                        <li>
+                            <strong>{{ task.name }}</strong><br>
+                            {{ task.planned_date }}
+                        </li>
+                    {% endfor %}
+                </ul>
+
+                <p>
+                    Zmień godzinę rozpoczęcia lub czas trwania zadania.
+                </p>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button"
+                        class="btn btn-primary"
+                        data-bs-dismiss="modal">
+                    Rozumiem
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const modalElement = document.getElementById("overlapModal");
+
+    if (modalElement) {
+        const modal = new bootstrap.Modal(modalElement);
+        modal.show();
+    }
+});
+</script>
+
+{% endif %}
+
+{% endblock %}
