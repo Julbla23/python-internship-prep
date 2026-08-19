@@ -13,7 +13,8 @@ from django.contrib.auth.forms import UserCreationForm
 
 def task_list(request):
     tasks = Task.objects.filter(planned_date__date = date.today()).order_by("position")
-    return render(request, "planner/tasks_list.html", {"tasks": tasks})
+    percentage = complete_percentage(request)
+    return render(request, "planner/tasks_list.html", {"tasks": tasks, "percentage": percentage})
 
 def change_order(request):
     if request.method == "POST":
@@ -166,3 +167,11 @@ def register(request):
         form = UserCreationForm()
     return render(request, 'planner/register.html', {'form': form})
 
+def complete_percentage(request):
+    done_tasks = Task.objects.filter(planned_date__date=date.today(), status="done").count()
+    all_tasks = Task.objects.filter(planned_date__date=date.today()).count()
+    if all_tasks > 0:
+        result = 100 * done_tasks / all_tasks
+        return f"{result}%"
+    else:
+        return "0%"
