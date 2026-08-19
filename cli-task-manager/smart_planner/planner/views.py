@@ -1,10 +1,14 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
+from jsonschema.validators import validate
+
 from .forms import AddTask, EditTask
 from .models import Task, Category
 from calendar import monthcalendar, month_name
 from datetime import datetime, date, timedelta
 import json
+from django.contrib.auth.forms import UserCreationForm
+# from django.contrib.auth.decorators import login_required
 
 
 def task_list(request):
@@ -151,4 +155,14 @@ def add_category(request):
             else:
                 raise Exception("Category already exists")
     return redirect("add_task")
+
+def register(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login')
+    else:
+        form = UserCreationForm()
+    return render(request, 'planner/register.html', {'form': form})
 

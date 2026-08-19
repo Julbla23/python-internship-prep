@@ -20,5 +20,9 @@
     <br><button type="button">Pokaż kalendarz</button>
 </a>
 <br><button type="button">Wyświetl statystyki</button>
+<form method="post" action="{% url 'logout' %}">
+    {% csrf_token %}
+    <br><button type="submit">Wyloguj się</button>
+</form>
 </body>
 </html>

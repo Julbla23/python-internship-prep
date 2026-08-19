@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Rejestracja</title>
+</head>
+<body>
+<form method="post">
+  {% csrf_token %}
+  <div class="container">
+    <h1>Rejestracja</h1>
+  {{ form }}
+
+    <p>Poprzez rejestrację akceptujesz nasz <a href="#">Regulamin</a>.</p>
+    <button type="submit" class="registerbtn">Zarejestruj się</button>
+  </div>
+
+  <div class="container signin">
+    <p>Masz już konto? <a href="{% url 'login' %}">Zaloguj się</a>.</p>
+  </div>
+</form>
+</body>
+</html>

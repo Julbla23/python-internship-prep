@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from django.contrib.auth.views import LoginView, LogoutView
 
 
 urlpatterns = [
@@ -12,4 +13,7 @@ urlpatterns = [
     path("calendar/", views.calendar, name="calendar"),
     path("calendar/<int:year>/<int:month>/<int:day>", views.tasks_by_day, name="tasks_by_day"),
     path("categories/add/", views.add_category, name="add_category"),
+    path("login/", LoginView.as_view(), name="login"),
+    path("logout/", LogoutView.as_view(), name='logout'),
+    path("register/", views.register, name="register"),
 ]
