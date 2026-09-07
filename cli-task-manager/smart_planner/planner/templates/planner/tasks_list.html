@@ -8,12 +8,16 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Task List</title>
+    <link href="{% static 'css/axis.css' %}" rel="stylesheet">
 </head>
 <body>
 <h1>Taski na dziś</h1>
+<p class="axis-warning"></p>
 <h2>Wykonanie dnia: </h2> {{ percentage }}
 
 {% if tasks %}
+<div class="day-axis">
+    <div class="current-time-line"></div>
     <ol>
         {% for task in tasks %}
             <li data-task-id="{{ task.id }}">
@@ -34,10 +38,11 @@
                 </a>
             </li>
         {% endfor %}
-        <a href="{% url 'add_task' %}">
-        <button type="button">Dodaj task</button>
-        </a>
     </ol>
+</div>
+<a href="{% url 'add_task' %}">
+    <button type="button">Dodaj task</button>
+</a>
 {% else %}
     <p>Nie masz zaplanowanych tasków na dziś.</p>
     <a href="{% url 'add_task' %}">
@@ -48,5 +53,6 @@
     <br><button type="button">Wróć do menu</button>
 </a>
 <script src="{% static 'js/change_order.js' %}"></script>
+<script src="{% static 'js/axis.js' %}"></script>
 </body>
 </html>
