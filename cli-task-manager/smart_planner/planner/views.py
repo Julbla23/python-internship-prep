@@ -8,13 +8,17 @@ from calendar import monthcalendar, month_name
 from datetime import datetime, date, timedelta
 import json
 from django.contrib.auth.forms import UserCreationForm
-# from django.contrib.auth.decorators import login_required
+from django.utils import timezone
 
 
 def task_list(request):
     tasks = Task.objects.filter(planned_date__date = date.today()).order_by("position")
     percentage = complete_percentage(request)
     return render(request, "planner/tasks_list.html", {"tasks": tasks, "percentage": percentage})
+
+def backlog_tasks_list(request):
+    backlog_tasks = Task.objects.filter(planned_date__lt = timezone.now(), status="todo", user=request.user)
+    return render(request, "planner/backlog_tasks_list.html", {"backlog_tasks": backlog_tasks})
 
 def change_order(request):
     if request.method == "POST":

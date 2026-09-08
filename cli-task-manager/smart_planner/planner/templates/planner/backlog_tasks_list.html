@@ -1,0 +1,19 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>Document</title>
+</head>
+<body>
+{% if backlog_tasks %}
+    <ol>
+        {% for task in backlog_tasks %}
+            <li data-task-id="{{ task.id }}">
+                {{ task.name }}
+            </li>
+        {% endfor %}
+    </ol>
+{% else %}
+    <p>Brak zaległych zadań.</p>
+{% endif %}
+</body>
+</html>
