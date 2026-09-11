@@ -1,5 +1,5 @@
 from django.db import models
-# from django.contrib.auth.models import User
+
 
 class Category(models.Model):
     name = models.CharField(max_length=50)
@@ -35,7 +35,7 @@ class Task(models.Model):
     user = models.EmailField()
     created_at = models.DateTimeField(auto_now_add=True)
     position = models.IntegerField(default=0)
-
+    status_changed_at = models.DateTimeField(null=True, blank=True)
     category = models.ForeignKey(
         Category,
         on_delete=models.SET_NULL,
@@ -46,3 +46,8 @@ class Task(models.Model):
     def __str__(self):
         return f"{self.name} ({self.duration_minutes}) due {self.deadline} ({self.priority})"
 
+class TaskMoveHistory(models.Model):
+    old_planned_date = models.DateTimeField()
+    new_planned_date = models.DateTimeField()
+    moved_at = models.DateTimeField(auto_now_add=True)
+    task = models.ForeignKey(Task,on_delete=models.CASCADE)

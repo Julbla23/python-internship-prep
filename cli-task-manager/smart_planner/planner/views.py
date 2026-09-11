@@ -1,9 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
-from jsonschema.validators import validate
-
 from .forms import AddTask, EditTask
-from .models import Task, Category
+from .models import Task, Category, TaskMoveHistory
 from calendar import monthcalendar, month_name
 from datetime import datetime, date, timedelta
 import json
@@ -54,6 +52,7 @@ def delete_task(request, n):
 def status_done(request, n):
     task = Task.objects.get(id=n)
     task.status = "done"
+    task.status_changed_at = timezone.now()
     task.save()
     return redirect("task_list")
 
@@ -119,9 +118,15 @@ def add_task(request):
 
 def edit_task(request, n):
     task = Task.objects.get(id=n)
+    old_planned_date = task.planned_date
     if request.method =="POST":
         form = EditTask(request.POST, instance=task) #bierze dane z formularza, bierze istniejący task, nakłada nowe dane na ten obiekt
         if form.is_valid():
+            new_planned_date = form.cleaned_data['planned_date']
+            if old_planned_date != new_planned_date:
+                task.status = "moved"
+                task.status_changed_at = timezone.now()
+                TaskMoveHistory.objects.create(task=task, old_planned_date=old_planned_date,new_planned_date=new_planned_date)
             form.save()
             return redirect("home")
     else:
@@ -179,3 +184,13 @@ def complete_percentage(request):
         return f"{result}%"
     else:
         return "0%"
+
+today = date.today()
+day_of_week = today.weekday()
+week_start = today - timedelta(days=day_of_week)
+week_end = week_start + timedelta(days=6)
+done_tasks = Task.objects.filter(
+    status="done",
+    status_changed_at__date__gte=week_start,
+    status_changed_at__date__lte=week_end
+).count()
