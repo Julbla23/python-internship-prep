@@ -17,4 +17,7 @@ urlpatterns = [
     path("logout/", LogoutView.as_view(), name='logout'),
     path("register/", views.register, name="register"),
     path("tasks/backlog/", views.backlog_tasks_list, name="backlog_tasks_list"),
+    path("tasks/statistics/weekly/", views.show_weekly_statistics, name="show_weekly_statistics"),
+    path("tasks/statistics/monthly/", views.show_monthly_statistics, name="show_monthly_statistics"),
+    path("tasks/statistics/quarterly/", views.show_quarterly_statistics, name="show_quarterly_statistics")
 ]

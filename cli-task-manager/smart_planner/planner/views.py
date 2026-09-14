@@ -134,7 +134,7 @@ def edit_task(request, n):
     return render(request, "planner/forms.html", {"form": form,"editing": True})
 
 def home(request):
-    return render(request, "planner/home.html")
+    return render(request, "planner/home.html",)
 
 def calendar(request):
     year = 2026
@@ -184,13 +184,48 @@ def complete_percentage(request):
         return f"{result}%"
     else:
         return "0%"
+def statistics(period_start, period_end):
+    today = date.today()
+    done_tasks = Task.objects.filter(
+        status="done",
+        status_changed_at__date__gte=period_start,
+        status_changed_at__date__lte=period_end
+    ).count()
+    moved_tasks = TaskMoveHistory.objects.filter(moved_at__date__gte=period_start, moved_at__date__lte=period_end).count()
+    overdue_tasks = Task.objects.filter(status="todo", deadline__lt=today).count()
+    backlog = Task.objects.filter(deadline__isnull=True).count()
+    return {"done": done_tasks, "moved": moved_tasks, "overdue": overdue_tasks, "backlog": backlog}
 
-today = date.today()
-day_of_week = today.weekday()
-week_start = today - timedelta(days=day_of_week)
-week_end = week_start + timedelta(days=6)
-done_tasks = Task.objects.filter(
-    status="done",
-    status_changed_at__date__gte=week_start,
-    status_changed_at__date__lte=week_end
-).count()
+def show_weekly_statistics(request):
+    today = date.today()
+    day_of_week = today.weekday()
+    week_start = today - timedelta(days=day_of_week)
+    week_end = week_start + timedelta(days=6)
+    weekly_statistics = statistics(week_start, week_end)
+    return render(request, "planner/weekly_statistics.html", {"statistics": weekly_statistics})
+
+def show_monthly_statistics(request):
+    today = date.today()
+    month_start = date(today.year, today.month, 1)
+    if today.month == 12:
+        next_month_start = date(today.year + 1, 1,1)
+    else:
+        next_month_start = date(today.year, today.month + 1, 1)
+    month_end = next_month_start - timedelta(days=1)
+    monthly_statistics = statistics(month_start, month_end)
+    return render(request, "planner/monthly_statistics.html", {"statistics": monthly_statistics})
+
+def show_quarterly_statistics(request):
+    today = date.today()
+    quarter_start_month = ((today.month - 1) // 3) * 3 + 1
+    quarter_start = date(today.year, quarter_start_month, 1)
+    next_quarter_start_month = quarter_start_month + 3
+    if next_quarter_start_month > 12:
+        next_quarter_start = date(today.year + 1, 1,1)
+    else:
+        next_quarter_start = date(today.year, next_quarter_start_month, 1)
+    quarter_end = next_quarter_start - timedelta(days=1)
+    quarterly_statistics = statistics(quarter_start, quarter_end)
+    return render(request, "planner/quarterly_statistics.html", {"statistics": quarterly_statistics})
+
+
