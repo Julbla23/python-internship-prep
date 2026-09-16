@@ -7,6 +7,8 @@ from datetime import datetime, date, timedelta
 import json
 from django.contrib.auth.forms import UserCreationForm
 from django.utils import timezone
+from django.db.models import Count
+from django.db.models.functions import TruncDate
 
 
 def task_list(request):
@@ -194,7 +196,22 @@ def statistics(period_start, period_end):
     moved_tasks = TaskMoveHistory.objects.filter(moved_at__date__gte=period_start, moved_at__date__lte=period_end).count()
     overdue_tasks = Task.objects.filter(status="todo", deadline__lt=today).count()
     backlog = Task.objects.filter(deadline__isnull=True).count()
-    return {"done": done_tasks, "moved": moved_tasks, "overdue": overdue_tasks, "backlog": backlog}
+    category_stats=Task.objects.filter(
+        status="done",
+        planned_date__date__gte=period_start,
+        planned_date__date__lte=period_end
+    ).values("category__name").annotate(count=Count("id"))
+    category_stats = list(category_stats)
+    for item in category_stats:
+        if item["category__name"] is None:
+            item["category__name"] = "Bez kategorii"
+    done_tasks_by_day = Task.objects.filter(
+        status="done",
+        status_changed_at__date__gte=period_start,
+        status_changed_at__date__lte=period_end
+    ).annotate(day=TruncDate("status_changed_at")).values("day").annotate(count=Count("id"))
+    done_tasks_by_day = list(done_tasks_by_day)
+    return {"done": done_tasks, "moved": moved_tasks, "overdue": overdue_tasks, "backlog": backlog, "category": category_stats, "day_tasks": done_tasks_by_day}
 
 def show_weekly_statistics(request):
     today = date.today()
