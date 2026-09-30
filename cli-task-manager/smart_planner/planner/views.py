@@ -195,7 +195,7 @@ def statistics(period_start, period_end):
     ).count()
     moved_tasks = TaskMoveHistory.objects.filter(moved_at__date__gte=period_start, moved_at__date__lte=period_end).count()
     overdue_tasks = Task.objects.filter(status="todo", deadline__lt=today).count()
-    backlog = Task.objects.filter(deadline__isnull=True).count()
+    backlog = Task.objects.filter(deadline__isnull=True, status="todo").count()
     category_stats=Task.objects.filter(
         status="done",
         planned_date__date__gte=period_start,

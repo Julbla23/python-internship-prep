@@ -19,7 +19,15 @@
 <a href="{% url 'calendar' %}">
     <br><button type="button">Pokaż kalendarz</button>
 </a>
-<br><button type="button">Wyświetl statystyki</button>
+<a href="{% url 'show_weekly_statistics' %}">
+    <br><button type="button">Wyświetl statystyki tygodniowe</button>
+</a>
+<a href="{% url 'show_monthly_statistics' %}">
+    <br><button type="button">Wyświetl statystyki miesięczne</button>
+</a>
+<a href="{% url 'show_quarterly_statistics' %}">
+    <br><button type="button">Wyświetl statystyki kwartalne</button>
+</a>
 <form method="post" action="{% url 'logout' %}">
     {% csrf_token %}
     <br><button type="submit">Wyloguj się</button>
