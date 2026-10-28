@@ -6,7 +6,7 @@ from .models import PRIORITY_CHOICES, STATUS_CHOICES, Task, Category
 
 
 class AddTask(forms.Form):
-    title = forms.CharField(max_length=50)
+    title = forms.CharField(max_length=100)
     planned_date = forms.DateTimeField(
         widget=forms.DateTimeInput(
             attrs={'type': 'datetime-local'}
